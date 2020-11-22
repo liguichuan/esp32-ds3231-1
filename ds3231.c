@@ -124,7 +124,7 @@ esp_err_t i2c_read_reg(const DS3231_Info *ds3231, uint8_t reg, const void *in_da
         i2c_master_read(cmd, (void *)in_data, in_size, I2C_MASTER_LAST_NACK);
         i2c_master_stop(cmd);
 
-        res = i2c_master_cmd_begin(ds3231->port, cmd, ds3231->timeoutMs / portTICK_RATE_MS);
+        res = i2c_master_cmd_begin(ds3231->port, cmd, ds3231->timeoutMs / portTICK_PERIOD_MS);
         if (res != ESP_OK)
             ESP_LOGE(TAG, "Could not read from device [0x%02x at %d]: %d", ds3231->addr, ds3231->port, res);
 
@@ -144,7 +144,7 @@ esp_err_t i2c_write_reg(const DS3231_Info *ds3231, uint8_t reg, const void *data
         i2c_master_write(cmd, (void *)&reg, 1, true);
         i2c_master_write(cmd, (void *)data, size, true);
         i2c_master_stop(cmd);
-        res = i2c_master_cmd_begin(ds3231->port, cmd, ds3231->timeoutMs / portTICK_RATE_MS);
+        res = i2c_master_cmd_begin(ds3231->port, cmd, ds3231->timeoutMs / portTICK_PERIOD_MS);
         if (res != ESP_OK)
             ESP_LOGE(TAG, "Could not write to device [0x%02x at %d]: %d", ds3231->addr, ds3231->port, res);
         i2c_cmd_link_delete(cmd);
